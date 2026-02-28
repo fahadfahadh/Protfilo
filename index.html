@@ -7,6 +7,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
   <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -919,9 +920,34 @@
   }, { threshold: 0.1 }); // Slightly lower threshold for mobile
   revealEls.forEach(el => io.observe(el));
 
-  // ─── Contact form ───
+   (function(){
+    emailjs.init("f8WJLfBrEhVNLx5-d"); // replace with your public key
+  })();
+
   function handleContactSubmit(e) {
     e.preventDefault();
+
+    const btn = document.getElementById("submit-btn");
+    btn.innerHTML = "Sending...";
+    btn.disabled = true;
+
+    const templateParams = {
+      from_name: document.getElementById("name").value,
+      from_email: document.getElementById("email").value,
+      message: document.getElementById("message").value,
+    };
+
+    emailjs.send("service_h1w80ib", "template_8x7h9dx", templateParams)
+      .then(function(response) {
+        alert("Message sent successfully!");
+        document.getElementById("contact-form").reset();
+        btn.innerHTML = "Send Message";
+        btn.disabled = false;
+      }, function(error) {
+        alert("Failed to send message. Try again.");
+        btn.innerHTML = "Send Message";
+        btn.disabled = false;
+      });
   }
 </script>
 </body>
