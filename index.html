@@ -56,6 +56,20 @@
       border: 1px solid rgba(255,255,255,0.2);
       box-shadow: 0 4px 24px rgba(0,0,0,0.3);
     }
+    .glass-btn-whatsapp {
+      background: rgba(37, 211, 102, 0.2);
+      border: 1px solid rgba(37, 211, 102, 0.4);
+      color: #86efac;
+      box-shadow: 0 0 15px rgba(37, 211, 102, 0.25);
+      transition: all 0.3s ease;
+      cursor: pointer;
+    }
+
+    .glass-btn-whatsapp:hover {
+      background: rgba(37, 211, 102, 0.3);
+      box-shadow: 0 0 25px rgba(37, 211, 102, 0.5);
+      transform: translateY(-2px);
+    }
 
     .glass-btn-primary {
       background: rgba(59,130,246,0.2);
@@ -497,6 +511,7 @@
     /* ─── Footer ─── */
     footer {
       text-align: center;
+      background-color:#070c1e;
       padding: 40px 20px;
       /* Leave enough room for the fixed nav + safe area */
       padding-bottom: calc(90px + var(--safe-bottom));
@@ -843,7 +858,7 @@
         </div>
       </div>
 
-      <div class="contact-form-card glass reveal-right">
+      <!-- <div class="contact-form-card glass reveal-right">
         <div class="contact-form-blob"></div>
         <form class="contact-form" id="contact-form" onsubmit="handleContactSubmit(event)">
           <div class="form-row">
@@ -867,6 +882,42 @@
             <i data-lucide="send" width="18" height="18"></i> Send Message
           </button>
         </form>
+      </div> -->
+      <div class="contact-form-card glass reveal-right">
+        <div class="contact-form-blob"></div>
+
+        <form class="contact-form" onsubmit="return false;">
+          
+          <div class="form-group">
+            <label for="name">Your Name</label>
+            <input type="text" id="name" placeholder="Name"
+              class="glass-input" required />
+          </div>
+
+          <div class="form-group">
+            <label for="message">Message</label>
+            <textarea id="message" rows="5"
+              placeholder="Type your message..."
+              class="glass-input" required></textarea>
+          </div>
+
+          <div style="display:flex; gap:15px; margin-top:20px;">
+            
+            <button type="button"
+              class="btn glass-btn-whatsapp"
+              onclick="sendWhatsApp()">
+              <i data-lucide="message-circle" width="18" height="18"></i>Send WhatsApp
+            </button>
+            
+            <button type="button"
+              class="btn glass-btn-primary"
+              onclick="sendEmail()">
+              <i data-lucide="mail" width="18" height="18"></i>Send Email
+            </button>
+
+          </div>
+
+        </form>
       </div>
 
     </div>
@@ -874,7 +925,7 @@
 </section>
 
 <footer>
-  <p>© 2024 Abdul Fahadh Jabbar. Crafted with passion.</p>
+  <p>© 2026 Abdul Fahadh Jabbar. Crafted with passion.</p>
 </footer>
 
 <script>
@@ -920,35 +971,41 @@
   }, { threshold: 0.1 }); // Slightly lower threshold for mobile
   revealEls.forEach(el => io.observe(el));
 
-   (function(){
-    emailjs.init("f8WJLfBrEhVNLx5-d"); // replace with your public key
-  })();
+  function getFormData() {
+  const name = document.getElementById("name").value.trim();
+  const message = document.getElementById("message").value.trim();
 
-  function handleContactSubmit(e) {
-    e.preventDefault();
-
-    const btn = document.getElementById("submit-btn");
-    btn.innerHTML = "Sending...";
-    btn.disabled = true;
-
-    const templateParams = {
-      from_name: document.getElementById("name").value,
-      from_email: document.getElementById("email").value,
-      message: document.getElementById("message").value,
-    };
-
-    emailjs.send("service_h1w80ib", "template_8x7h9dx", templateParams)
-      .then(function(response) {
-        alert("Message sent successfully!");
-        document.getElementById("contact-form").reset();
-        btn.innerHTML = "Send Message";
-        btn.disabled = false;
-      }, function(error) {
-        alert("Failed to send message. Try again.");
-        btn.innerHTML = "Send Message";
-        btn.disabled = false;
-      });
+  if (!name || !message) {
+    alert("Please fill all fields");
+    return null;
   }
+
+  return `Name: ${name}%0A%0AMessage: ${message}`;
+}
+
+// ✅ WhatsApp
+function sendWhatsApp() {
+  const text = getFormData();
+  if (!text) return;
+
+  const phone = "919048131991"; // 91 + number
+  const url = `https://wa.me/${phone}?text=${text}`;
+
+  window.open(url, "_blank");
+}
+
+// ✅ Gmail
+function sendEmail() {
+  const text = getFormData();
+  if (!text) return;
+
+  const subject = "Contact Message";
+  const email = "abdulfahadjabbar@gmail.com";
+
+  const url = `mailto:${email}?subject=${encodeURIComponent(subject)}&body=${text}`;
+
+  window.location.href = url;
+}
 </script>
 </body>
 </html>
