@@ -554,10 +554,10 @@
     <p class="hero-desc">Building Scalable Applications &amp; Medical Imaging Solutions. Turning complex problems into elegant, robust code.</p>
 
     <div class="hero-btns">
-      <button class="btn glass-btn-primary" onclick="scrollTo('projects')">
+      <button class="btn glass-btn-primary" onclick="scrollToSelectedPosition('projects')">
         View Projects <i data-lucide="arrow-right" width="20" height="20" class="arrow-icon"></i>
       </button>
-      <button class="btn glass-btn" onclick="scrollTo('contact')">Contact Me</button>
+      <button class="btn glass-btn" onclick="scrollToSelectedPosition('contact')">Contact Me</button>
     </div>
 
     <div class="hero-links">
@@ -935,7 +935,7 @@
   lucide.createIcons();
 
   // ─── Smooth scroll helper ───
-  function scrollTo(id) {
+  function scrollToSelectedPosition(id) {
     document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' });
   }
 
@@ -956,7 +956,7 @@
   }
 
   navBtns.forEach(btn => {
-    btn.addEventListener('click', () => scrollTo(btn.dataset.target));
+    btn.addEventListener('click', () => scrollToSelectedPosition(btn.dataset.target));
   });
 
   window.addEventListener('scroll', updateActiveNav, { passive: true });
